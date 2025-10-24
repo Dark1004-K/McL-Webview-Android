@@ -88,7 +88,7 @@ dependencies {
 ### 2. Kotlin 코드에서 사용 및 URL 로드
 액티비티나 프래그먼트에서 McWebview를 초기화하고 사용합니다.
 ```kotlin
-import com.dark1004.mcwebview.McWebview
+import com.bdgen.mcwebview.McWebview
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 
