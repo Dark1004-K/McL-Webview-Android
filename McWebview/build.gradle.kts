@@ -21,7 +21,7 @@ android {
 //        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 //        consumerProguardFiles("consumer-rules.pro")
 
-        val sdkVersionName = "1.0.0"
+        val sdkVersionName = "1.0.1"
         val versionCode = 1
 
         val commitHash = try {
