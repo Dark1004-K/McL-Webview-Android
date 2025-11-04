@@ -18,9 +18,6 @@ android {
     defaultConfig {
         minSdk = 24
 
-//        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-//        consumerProguardFiles("consumer-rules.pro")
-
         val sdkVersionName = "1.0.2"
         val versionCode = 3
 
@@ -55,11 +52,11 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
-    kotlinOptions {
-        jvmTarget = "11"
+    kotlin {
+        jvmToolchain(17)
     }
 
     buildToolsVersion = "35.0.0"
@@ -76,9 +73,6 @@ dependencies {
     implementation(libs.androidx.material3)
     implementation(libs.androidx.datastore.preferences)
     implementation(libs.tink.android)
-//    implementation(libs.androidx.datastore.preferences)
-//    implementation(libs.tink.android)
-
     implementation(kotlin("reflect"))
     implementation(libs.gson)
 }
