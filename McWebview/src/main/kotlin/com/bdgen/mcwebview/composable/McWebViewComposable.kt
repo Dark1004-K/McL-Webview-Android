@@ -2,11 +2,9 @@ package com.bdgen.mcwebview.composable
 
 import android.util.Log
 import android.view.ViewGroup
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.viewinterop.AndroidView
-import com.bdgen.mcwebview.core.McWebPlugin
 import com.bdgen.mcwebview.core.McWebView
 
 @Composable

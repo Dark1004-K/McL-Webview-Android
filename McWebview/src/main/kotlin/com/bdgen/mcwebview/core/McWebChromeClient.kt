@@ -1,6 +1,5 @@
 package com.bdgen.mcwebview.core
 
-import android.app.Dialog
 import android.net.Uri
 import android.util.Log
 import android.webkit.ConsoleMessage

@@ -4,20 +4,20 @@ import android.content.Context
 import android.os.Build
 import android.util.AttributeSet
 import android.util.Log
-import android.view.ViewGroup
-import android.webkit.JavascriptInterface
 import android.webkit.WebSettings
 import android.webkit.WebView
 import com.bdgen.mcwebview.BuildConfig
-
 
 
 class McWebView : WebView {
     constructor(context: Context): super(context)
     constructor(context: Context, attrs: AttributeSet?): super(context, attrs)
     constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int): super(context, attrs, defStyleAttr)
-    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int, privateBrowsing: Boolean): super(context, attrs, defStyleAttr, privateBrowsing)
     constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int, defStyleRes: Int): super(context, attrs, defStyleAttr, defStyleRes)
+
+//    @Deprecated("Deprecated")
+//    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int, privateBrowsing: Boolean): super(context, attrs, defStyleAttr, privateBrowsing)
+
     private val agent = ";McWebView;Mcl(os:Android, versionCode:" + BuildConfig.VERSION_CODE + ", versionName:" + BuildConfig.VERSION_NAME + ", osVersion:" + Build.VERSION.RELEASE + ");"
     private var plugins: HashMap<String, McWebPlugin> = HashMap<String, McWebPlugin>()
 

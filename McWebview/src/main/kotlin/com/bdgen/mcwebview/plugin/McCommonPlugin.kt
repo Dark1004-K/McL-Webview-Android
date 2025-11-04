@@ -1,10 +1,7 @@
 package com.bdgen.mcwebview.plugin
 
 import android.content.Context
-import android.os.Handler
-import android.os.Looper
 import android.util.Log
-import android.webkit.JavascriptInterface
 import com.bdgen.mcwebview.core.McResponseStatus
 import com.bdgen.mcwebview.core.McWebMethod
 import com.bdgen.mcwebview.core.McWebPlugin
