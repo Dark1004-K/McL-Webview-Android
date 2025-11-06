@@ -18,8 +18,8 @@ android {
     defaultConfig {
         minSdk = 24
 
-        val sdkVersionName = "1.0.2"
-        val versionCode = 3
+        val sdkVersionName = "1.0.3"
+        val versionCode = 4
 
         val commitHash = try {
             val stdout = ByteArrayOutputStream()
