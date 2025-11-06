@@ -43,6 +43,7 @@ class McCommonPlugin(val listener: McCommonListener) : McWebPlugin() {
 
     @McWebMethod
     fun getProperty(callbackId: String, key:String) {
+        McPreference.init(listener.getContext())
         Log.d(this.name, "getProperty ")
         var value = ""
         CoroutineScope(Dispatchers.Main).launch {
@@ -56,6 +57,7 @@ class McCommonPlugin(val listener: McCommonListener) : McWebPlugin() {
     @McWebMethod
     fun setProperty(callbackId: String, key:String, value:String) {
         Log.d(this.name, "setProperty ")
+        McPreference.init(listener.getContext())
         CoroutineScope(Dispatchers.Main).launch {
             withContext(Dispatchers.IO) {
                 McPreference.write(listener.getContext(), key, value)

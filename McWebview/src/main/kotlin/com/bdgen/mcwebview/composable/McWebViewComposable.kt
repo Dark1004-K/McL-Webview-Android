@@ -25,6 +25,8 @@ fun McWebView(modifier: Modifier = Modifier, onCreated:((McWebView) -> Unit)? = 
         }
     )
 }
+
+
 //class McWebViewController(var webViewcom.bd.mamfdev ----------------------------
 //    fun loadUrl(url: String) {
 //        Log.d("${this.javaClass.name}", "setView")
