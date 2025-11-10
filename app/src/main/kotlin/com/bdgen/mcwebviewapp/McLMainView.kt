@@ -53,7 +53,9 @@ class McLMainView : McLView<McLMainViewModel> {
                 onCreated = { view ->
                     model.webView = view
                     model.webView?.initialize()
-                }
+                },
+                onDownload = model.listener.download,
+                onReceivedError = model.listener.receivedError,
             )
         }
     }

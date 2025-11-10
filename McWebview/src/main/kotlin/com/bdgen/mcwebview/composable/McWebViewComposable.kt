@@ -2,13 +2,22 @@ package com.bdgen.mcwebview.composable
 
 import android.util.Log
 import android.view.ViewGroup
+import android.webkit.WebResourceError
+import android.webkit.WebResourceRequest
+import android.webkit.WebView
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.viewinterop.AndroidView
 import com.bdgen.mcwebview.core.McWebView
+import com.bdgen.mcwebview.core.McWebViewClient
 
+
+typealias McWebviewDownload = (url:String, userAgent:String, contentDisposition:String, mimeType:String, contentLength:Long) -> Unit
+typealias McWebviewReceivedError = (view: WebView?, request: WebResourceRequest?, error: WebResourceError?) -> Boolean
 @Composable
-fun McWebView(modifier: Modifier = Modifier, onCreated:((McWebView) -> Unit)? = null)//, plugins:List<McWebPlugin>? = null)
+fun McWebView(modifier: Modifier = Modifier, onCreated:((McWebView) -> Unit)? = null,
+              onDownload:McWebviewDownload? = null,
+              onReceivedError: McWebviewReceivedError? = null)
 {
     AndroidView(
         modifier = modifier, // Occupy the full available space
@@ -20,24 +29,9 @@ fun McWebView(modifier: Modifier = Modifier, onCreated:((McWebView) -> Unit)? = 
                 )
                 Log.d("DarkAngel", "init webview")
                 onCreated?.invoke(this)
-//                for (plugin in plugins ?: return@Init) addPlugin(plugin)
+                if(onDownload != null) setDownloadListener(onDownload)
+                if(onReceivedError != null) mcWebViewClient.receivedError = onReceivedError
             }
         }
     )
 }
-
-
-//class McWebViewController(var webViewcom.bd.mamfdev ----------------------------
-//    fun loadUrl(url: String) {
-//        Log.d("${this.javaClass.name}", "setView")
-//        webViewInstance?.loadUrl(url)
-//    }
-//
-//    fun evaluateJavascript(script:String, resultCallback: ValueCallback<String>?) {
-//        webViewInstance?.evaluateJavascript(script, resultCallback)
-//    }
-//
-//    fun addPlugin(plugin: McWebPlugin) {
-//        webViewInstance?.addPlugin(plugin)
-//    }
-//}

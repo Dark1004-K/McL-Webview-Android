@@ -2,19 +2,29 @@ package com.bdgen.mcwebview.core
 
 import android.content.ActivityNotFoundException
 import android.content.Intent
+import android.net.Uri
 import android.net.http.SslError
 import android.util.Log
 import android.webkit.CookieManager
 import android.webkit.SslErrorHandler
+import android.webkit.WebResourceError
 import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.core.net.toUri
+import androidx.core.view.get
 import java.net.URISyntaxException
 
-class McWebViewClient() : WebViewClient() {
-//    private val context: Context? = null
+class McWebViewClient: WebViewClient {
     private var savedCookie: String? = null
+
+
+    constructor(): super()
+//    constructor(onReceivedError: ((view: WebView?, request: WebResourceRequest?, error: WebResourceError?) -> Unit)? = null ) : super() {
+//        this.onReceivedError = onReceivedError
+//    }
+    var receivedError: ((view: WebView?, request: WebResourceRequest?, error: WebResourceError?) -> Boolean)? = null
+
     /**
      * SSL 오류 일 경우 처리 할 것!!!
      *     Alert 처리도 같이 고민해야함.. By DarkAngel
@@ -31,10 +41,15 @@ class McWebViewClient() : WebViewClient() {
         super.onReceivedSslError(view, handler, error)
     }
 
-/**
- * 네트워크 감지 에러!!
- * 나중에 고민 할 것.
- */
+    override fun onReceivedError(view: WebView?, request: WebResourceRequest?, error: WebResourceError?) {
+        if(this.receivedError?.invoke(view, request, error) == true) return
+        super.onReceivedError(view, request, error)
+    }
+
+    /**
+     * 네트워크 감지 에러!!
+     * 나중에 고민 할 것.
+     */
     //    @Override
     //    public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
     //        super.onReceivedError(view, request, error);
@@ -62,7 +77,7 @@ class McWebViewClient() : WebViewClient() {
      *
      * 참고 url : https://m.blog.naver.com/overhere-kr/221115439264 (17년도부터 현대카드 스키마 오류 있었음)
      */
-    private fun onloadUrl(view: WebView, url: String) : Boolean {
+    private fun onloadUrl(view: WebView, url: String): Boolean {
         val cookieManager = CookieManager.getInstance()
         val cookie = cookieManager.getCookie(url)
         if (cookie != null) {
@@ -71,54 +86,48 @@ class McWebViewClient() : WebViewClient() {
             if (savedCookie != null) cookieManager.setCookie(url, savedCookie)
         }
 
-        //웹뷰 내 표준창에서 외부앱(통신사 인증앱)을 호출하려면 intent:// URI를 별도로 처리해줘야 합니다.
-        //다음 소스를 적용 해주세요.
         Log.d("McWebView", "url : " + url)
 
-        if (url.startsWith("intent:")) {
-            var intent: Intent? = null
-            try {
-                intent = Intent.parseUri(url, Intent.URI_INTENT_SCHEME)
-                if (intent != null) {
-                    //앱실행
-                    view.context.startActivity(intent)
-                }
-            } catch (e: URISyntaxException) {
-                //URI 문법 오류 시 처리 구간
-            } catch (e: ActivityNotFoundException) {
-                val packageName = intent!!.getPackage()
-                if (packageName != "") {
-                    // 앱이 설치되어 있지 않을 경우 구글마켓 이동
-                    view.context.startActivity(
-                        Intent(
-                            Intent.ACTION_VIEW,
-                            ("market://details?id=$packageName").toUri()
-                        )
-                    )
-                }
-            }
-            //return 값을 반드시 true로 해야 합니다.
-            return true
-        } else if (url.startsWith("https://play.google.com/store/apps/details?id=") || url.startsWith(
-                "market://details?id="
-            )
-        ) {
-            //표준창 내 앱설치하기 버튼 클릭 시 PlayStore 앱으로 연결하기 위한 로직
-            val uri = url.toUri()
-            val packageName = uri.getQueryParameter("id")
-            if (packageName != null && packageName != "") {
-                // 구글마켓 이동
-                view.context.startActivity(
-                    Intent(
-                        Intent.ACTION_VIEW,
-                        ("market://details?id=$packageName").toUri()
-                    )
-                )
-            }
-            //return 값을 반드시 true로 해야 합니다.
-            return true
+        val webview = view as McWebView
+        val scheme = url.toUri().scheme
+        if(scheme == null) return false
+        webview.schemes.get(scheme)?.let {
+            return it.action(view, url.toUri())
         }
+
+        //웹뷰 내 표준창에서 외부앱(통신사 인증앱)을 호출하려면 intent:// URI를 별도로 처리해줘야 합니다.
+        //다음 소스를 적용 해주세요.
+
+//        if (url.startsWith("intent:")) {
+//            var intent: Intent? = null
+//            try {
+//                intent = Intent.parseUri(url, Intent.URI_INTENT_SCHEME)
+//                if (intent != null) {
+//                    //앱실행
+//                    view.context.startActivity(intent)
+//                }
+//            } catch (e: URISyntaxException) {
+//                //URI 문법 오류 시 처리 구간
+//            } catch (e: ActivityNotFoundException) {
+//                val packageName = intent!!.getPackage()
+//                if (packageName != "") {
+//                    // 앱이 설치되어 있지 않을 경우 구글마켓 이동
+//                    view.context.startActivity(Intent(Intent.ACTION_VIEW, ("market://details?id=$packageName").toUri()))
+//                }
+//            }
+//            //return 값을 반드시 true로 해야 합니다.
+//            return true
+//        } else if (url.startsWith("https://play.google.com/store/apps/details?id=") || url.startsWith("market://details?id=")) {
+//            //표준창 내 앱설치하기 버튼 클릭 시 PlayStore 앱으로 연결하기 위한 로직
+//            val uri = url.toUri()
+//            val packageName = uri.getQueryParameter("id")
+//            if (packageName != null && packageName != "") {
+//                // 구글마켓 이동
+//                view.context.startActivity(Intent(Intent.ACTION_VIEW, ("market://details?id=$packageName").toUri()))
+//            }
+//            //return 값을 반드시 true로 해야 합니다.
+//            return true
+//        }
         return false
     }
-
 }

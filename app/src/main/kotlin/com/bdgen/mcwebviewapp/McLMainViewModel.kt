@@ -1,10 +1,13 @@
 package com.bdgen.mcwebviewapp
 
 import android.annotation.SuppressLint
+import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.bdgen.mcwebview.core.McWebPlugin
+import com.bdgen.mcwebview.composable.McWebviewDownload
+import com.bdgen.mcwebview.composable.McWebviewReceivedError
+import com.bdgen.mcwebview.core.McScheme
 import com.bdgen.mcwebview.core.McWebView
 import com.bdgen.mcwebview.plugin.McCommonPlugin
 import com.bdgen.mcwebview.plugin.McCommonPlugin.McCommonListener
@@ -13,13 +16,21 @@ import com.bdgen.mcwebviewapp.common.McLViewModel
 class McLMainViewModel : McLViewModel<McLMainActivity, McLMainViewModel.McLMainViewModelListener> {
     data class McLMainViewModelListener(
         override val activity: () -> McLMainActivity,
-        val commonListener: McCommonListener
+        val commonListener: McCommonListener,
+        val sendTo: (url: Uri) -> Unit,
+        val download: McWebviewDownload,
+        val receivedError: McWebviewReceivedError
     ): McLViewModelListener<McLMainActivity>(activity)
 
     override lateinit var listener: McLMainViewModelListener
 
     lateinit var url :String
     lateinit var commonPlugin :McCommonPlugin
+
+    val mailTo: McScheme = McScheme("mailto") { webview, url ->
+        this.listener.sendTo(url)
+        return@McScheme true
+    }
 
 
     @SuppressLint("StaticFieldLeak")
@@ -33,7 +44,8 @@ class McLMainViewModel : McLViewModel<McLMainActivity, McLMainViewModel.McLMainV
     }
 
     override fun onLaunched(activity: McLMainActivity) {
-        for (plugin in this.getPlugins()) webView?.addPlugin(plugin)
+        this.webView?.addPlugin(this.commonPlugin)
+        this.webView?.addScheme(this.mailTo)
     }
 
     override fun onCleared() {
@@ -43,13 +55,17 @@ class McLMainViewModel : McLViewModel<McLMainActivity, McLMainViewModel.McLMainV
         super.onCleared()
     }
 
-    fun getPlugins() : List<McWebPlugin> {
-        return listOf(commonPlugin)
+    fun loadWebview() {
+        this.webView?.loadUrl(url)
     }
 
-    fun loadWebview() {
-        webView?.loadUrl(url)
-    }
+//    val download: McWebviewDownload = { url, userAgent, contentDisposition, mimeType, contentLength ->
+//        this.listener.download(url, userAgent, contentDisposition, mimeType, contentLength)
+//    }
+//
+//    val receivedError: McWebviewReceivedError = { errorCode, description, failingUrl ->
+//
+//    }
 }
 
 class McLMainViewModelFactory(private val listener: McLMainViewModel.McLMainViewModelListener) : ViewModelProvider.Factory

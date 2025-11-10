@@ -20,15 +20,23 @@ class McWebView : WebView {
 
     private val agent = ";McWebView;Mcl(os:Android, versionCode:" + BuildConfig.VERSION_CODE + ", versionName:" + BuildConfig.VERSION_NAME + ", osVersion:" + Build.VERSION.RELEASE + ");"
     private var plugins: HashMap<String, McWebPlugin> = HashMap<String, McWebPlugin>()
+    var schemes: HashMap<String, McScheme> = HashMap<String, McScheme>()
+
+    lateinit var mcWebViewClient: McWebViewClient
+    lateinit var mcWebChromeClient: McWebChromeClient
+
 
     fun initialize() {
+        mcWebViewClient = McWebViewClient()
+        mcWebChromeClient = McWebChromeClient()
+
+        webViewClient = this.mcWebViewClient
+        webChromeClient = this.mcWebChromeClient
         this.loadDefaultConfig()
     }
 
     @SuppressLint("SetJavaScriptEnabled")
     private fun loadConfig() {
-        webViewClient = McWebViewClient();
-        webChromeClient = McWebChromeClient();
 
         val settings = getSettings()
         val newAgent = settings.userAgentString + agent
@@ -72,11 +80,17 @@ class McWebView : WebView {
     fun addPlugin(plugin: McWebPlugin) {
         Log.d("sumer", "addPlugin : ${plugin.name} addr: $plugin")
         plugin.webView = this
-        plugins.put(plugin.name, plugin)
+        this.plugins.put(plugin.name, plugin)
         try {
             addJavascriptInterface(plugin, plugin.name)
         } catch (e: Exception) {
             Log.d("sumer", "addJavascriptInterface error")
         }
+    }
+
+    fun addScheme(scheme: McScheme) {
+        Log.d("sumer", "addScheme : ${scheme.name} addr: $scheme")
+//        plugin.webView = this
+        this.schemes.put(scheme.name, scheme)
     }
 }
