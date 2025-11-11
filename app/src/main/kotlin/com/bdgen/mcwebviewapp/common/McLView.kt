@@ -1,7 +1,6 @@
 package com.bdgen.mcwebviewapp.common
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.tooling.preview.Preview
 
 abstract class McLView<VM: McLViewModel<*, *>> {

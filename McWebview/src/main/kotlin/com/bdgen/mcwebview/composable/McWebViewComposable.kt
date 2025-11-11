@@ -9,7 +9,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.viewinterop.AndroidView
 import com.bdgen.mcwebview.core.McWebView
-import com.bdgen.mcwebview.core.McWebViewClient
 
 
 typealias McWebviewDownload = (url:String, userAgent:String, contentDisposition:String, mimeType:String, contentLength:Long) -> Unit

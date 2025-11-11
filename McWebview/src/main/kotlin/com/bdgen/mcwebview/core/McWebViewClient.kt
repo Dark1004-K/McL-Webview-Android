@@ -1,8 +1,5 @@
 package com.bdgen.mcwebview.core
 
-import android.content.ActivityNotFoundException
-import android.content.Intent
-import android.net.Uri
 import android.net.http.SslError
 import android.util.Log
 import android.webkit.CookieManager
@@ -12,8 +9,6 @@ import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.core.net.toUri
-import androidx.core.view.get
-import java.net.URISyntaxException
 
 class McWebViewClient: WebViewClient {
     private var savedCookie: String? = null

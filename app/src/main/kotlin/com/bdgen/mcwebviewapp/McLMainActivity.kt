@@ -3,7 +3,6 @@ package com.bdgen.mcwebviewapp
 import android.app.DownloadManager
 import android.app.DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.os.Environment.DIRECTORY_DOWNLOADS
 import android.webkit.URLUtil
@@ -22,8 +21,7 @@ class McLMainActivity() : McLComponentActivity<McLMainActivity, McLMainView, McL
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-//        model.url = "http://192.168.0.215:3000"
-        model.url = "http://192.168.0.42:3001"
+        model.url = "http://192.168.0.215:3000"
     }
 
     override suspend fun onLaunched() {
