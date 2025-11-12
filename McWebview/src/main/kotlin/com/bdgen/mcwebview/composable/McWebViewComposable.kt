@@ -7,6 +7,7 @@ import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.viewinterop.AndroidView
 import com.bdgen.mcwebview.core.McWebView
 
@@ -27,6 +28,7 @@ fun McWebView(modifier: Modifier = Modifier, onCreated:((McWebView) -> Unit)? = 
                     ViewGroup.LayoutParams.MATCH_PARENT
                 )
                 Log.d("DarkAngel", "init webview")
+                initialize()
                 onCreated?.invoke(this)
                 if(onDownload != null) setDownloadListener(onDownload)
                 if(onReceivedError != null) mcWebViewClient.receivedError = onReceivedError

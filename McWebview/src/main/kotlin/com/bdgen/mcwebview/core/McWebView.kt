@@ -32,7 +32,6 @@ class McWebView : WebView {
 
         webViewClient = this.mcWebViewClient
         webChromeClient = this.mcWebChromeClient
-        this.loadDefaultConfig()
     }
 
     @SuppressLint("SetJavaScriptEnabled")
@@ -66,6 +65,7 @@ class McWebView : WebView {
 
         settings.mixedContentMode = WebSettings.MIXED_CONTENT_COMPATIBILITY_MODE
     }
+
     fun loadDefaultConfig() {
 
         Log.d("sumer", "loadDefaultConfig")
@@ -80,7 +80,7 @@ class McWebView : WebView {
     fun addPlugin(plugin: McWebPlugin) {
         Log.d("sumer", "addPlugin : ${plugin.name} addr: $plugin")
         plugin.webView = this
-        this.plugins.put(plugin.name, plugin)
+        this.plugins[plugin.name] = plugin
         try {
             addJavascriptInterface(plugin, plugin.name)
         } catch (e: Exception) {
@@ -91,6 +91,6 @@ class McWebView : WebView {
     fun addScheme(scheme: McScheme) {
         Log.d("sumer", "addScheme : ${scheme.name} addr: $scheme")
 //        plugin.webView = this
-        this.schemes.put(scheme.name, scheme)
+        this.schemes[scheme.name] = scheme
     }
 }

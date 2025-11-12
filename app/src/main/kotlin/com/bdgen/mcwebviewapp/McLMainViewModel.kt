@@ -20,15 +20,15 @@ class McLMainViewModel : McLViewModel<McLMainActivity, McLMainViewModel.McLMainV
         val sendTo: (url: Uri) -> Unit,
         val download: McWebviewDownload,
         val receivedError: McWebviewReceivedError
-    ): McLViewModelListener<McLMainActivity>(activity)
+    ): McLViewModelListener<McLMainActivity>()
 
-    override lateinit var listener: McLMainViewModelListener
+    override var listener: McLMainViewModelListener? = null
 
     lateinit var url :String
     lateinit var commonPlugin :McCommonPlugin
 
     val mailTo: McScheme = McScheme("mailto") { webview, url ->
-        this.listener.sendTo(url)
+        this.listener?.sendTo(url)
         return@McScheme true
     }
 

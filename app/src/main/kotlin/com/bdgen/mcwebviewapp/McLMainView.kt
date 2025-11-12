@@ -10,6 +10,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.view.WindowCompat
@@ -25,13 +26,12 @@ class McLMainView : McLView<McLMainViewModel> {
 
     @Composable
     override fun Content(model: McLMainViewModel) {
-        var webView: McWebView? by remember { mutableStateOf(null) }
-        val currentModel = model ?: return
+        val currentModel = model
         val view = LocalView.current
         McWebviewAppTheme {
             SideEffect {
                 if (!view.isInEditMode) {
-                    WindowCompat.getInsetsController(model.activity.window, view).run {
+                    WindowCompat.getInsetsController(model.activity!!.window, view).run {
                         show(WindowInsetsCompat.Type.navigationBars())
                         isAppearanceLightNavigationBars = true
                         isAppearanceLightStatusBars = true
@@ -44,6 +44,7 @@ class McLMainView : McLView<McLMainViewModel> {
 
     @Composable
     fun McWebviewScreen(model: McLMainViewModel) {
+        val isPreview = LocalInspectionMode.current
         Scaffold(modifier = Modifier.fillMaxSize())
         { padding ->
             McWebView(
@@ -52,10 +53,10 @@ class McLMainView : McLView<McLMainViewModel> {
                     .padding(padding),
                 onCreated = { view ->
                     model.webView = view
-                    model.webView?.initialize()
+                   if(!isPreview) model.webView?.loadDefaultConfig()
                 },
-                onDownload = model.listener.download,
-                onReceivedError = model.listener.receivedError,
+                onDownload = model.listener?.download,
+                onReceivedError = model.listener?.receivedError,
             )
         }
     }
