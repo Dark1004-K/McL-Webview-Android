@@ -66,6 +66,10 @@ class McCommonPlugin(val listener: McCommonListener) : McWebPlugin() {
         }
     }
 
+    fun onBackPressed() {
+        webView.evaluateJavascript(this.name + ".onBackPressed()", null)
+    }
+
     /**
      * TODO:
      * - callTokTokApp I/F

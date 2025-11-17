@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.os.Environment.DIRECTORY_DOWNLOADS
 import android.webkit.URLUtil
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import androidx.core.net.toUri
 import com.bdgen.mcwebview.plugin.McCommonPlugin
@@ -22,10 +23,18 @@ class McLMainActivity() : McLComponentActivity<McLMainActivity, McLMainView, McL
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         model.url = "http://192.168.0.215:3000"
+
+        onBackPressedDispatcher.addCallback(this, backPressed)
     }
 
     override suspend fun onLaunched() {
         model.loadWebview()
+    }
+
+    val backPressed = object : OnBackPressedCallback(true /* enabled */) {
+        override fun handleOnBackPressed() {
+            model.onBackPressed()
+        }
     }
 
     val viewModelListener = McLMainViewModel.McLMainViewModelListener(

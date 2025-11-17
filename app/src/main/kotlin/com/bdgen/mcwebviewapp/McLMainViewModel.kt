@@ -59,6 +59,10 @@ class McLMainViewModel : McLViewModel<McLMainActivity, McLMainViewModel.McLMainV
         this.webView?.loadUrl(url)
     }
 
+    fun onBackPressed() {
+        this.commonPlugin.onBackPressed()
+    }
+
 //    val download: McWebviewDownload = { url, userAgent, contentDisposition, mimeType, contentLength ->
 //        this.listener.download(url, userAgent, contentDisposition, mimeType, contentLength)
 //    }
