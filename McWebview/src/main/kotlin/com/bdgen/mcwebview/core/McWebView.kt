@@ -18,7 +18,7 @@ class McWebView : WebView {
 //    @Deprecated("Deprecated")
 //    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int, privateBrowsing: Boolean): super(context, attrs, defStyleAttr, privateBrowsing)
 
-    private val agent = ";McWebView;Mcl(os:Android, versionCode:" + BuildConfig.VERSION_CODE + ", versionName:" + BuildConfig.VERSION_NAME + ", osVersion:" + Build.VERSION.RELEASE + ");"
+//    private val agent = ";McWebView;Mcl(os:Android, versionCode:" + BuildConfig.VERSION_CODE + ", versionName:" + BuildConfig.VERSION_NAME + ", osVersion:" + Build.VERSION.RELEASE + ");"
     private var plugins: HashMap<String, McWebPlugin> = HashMap<String, McWebPlugin>()
     var schemes: HashMap<String, McScheme> = HashMap<String, McScheme>()
 
@@ -34,12 +34,19 @@ class McWebView : WebView {
         webChromeClient = this.mcWebChromeClient
     }
 
+    fun setUserAgent(appVersion:String, versionCode:String) {
+        val settings = getSettings()
+        val agent = ";McWebView;Mcl(os:Android, versionCode:" + versionCode + ", versionName:" + appVersion + ", osVersion:" + Build.VERSION.RELEASE + ");"
+        val newAgent = settings.userAgentString + agent
+        settings.setUserAgentString(newAgent)
+    }
+
     @SuppressLint("SetJavaScriptEnabled")
     private fun loadConfig() {
 
         val settings = getSettings()
-        val newAgent = settings.userAgentString + agent
-        settings.setUserAgentString(newAgent)
+//        val newAgent = settings.userAgentString + agent
+//        settings.setUserAgentString(newAgent)
         settings.javaScriptEnabled = true
         settings.domStorageEnabled = true
         settings.javaScriptCanOpenWindowsAutomatically = true

@@ -53,7 +53,10 @@ class McLMainView : McLView<McLMainViewModel> {
                     .padding(padding),
                 onCreated = { view ->
                     model.webView = view
-                   if(!isPreview) model.webView?.loadDefaultConfig()
+                   if(!isPreview) {
+                       model.webView?.loadDefaultConfig()
+                       model.setWebViewUserAgent()
+                   }
                 },
                 onDownload = model.listener?.download,
                 onReceivedError = model.listener?.receivedError,

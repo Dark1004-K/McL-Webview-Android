@@ -63,6 +63,12 @@ class McLMainViewModel : McLViewModel<McLMainActivity, McLMainViewModel.McLMainV
         this.commonPlugin.onBackPressed()
     }
 
+    fun setWebViewUserAgent() {
+        val appVersion = BuildConfig.VERSION_NAME
+        val versionCode = "${BuildConfig.VERSION_CODE}"
+        this.webView?.setUserAgent(appVersion,versionCode)
+    }
+
 //    val download: McWebviewDownload = { url, userAgent, contentDisposition, mimeType, contentLength ->
 //        this.listener.download(url, userAgent, contentDisposition, mimeType, contentLength)
 //    }
