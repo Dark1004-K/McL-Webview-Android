@@ -4,6 +4,7 @@ import android.net.Uri
 import android.util.Log
 import android.webkit.ConsoleMessage
 import android.webkit.JsPromptResult
+import android.webkit.JsResult
 import android.webkit.ValueCallback
 import android.webkit.WebChromeClient
 import android.webkit.WebView
@@ -13,6 +14,7 @@ class McWebChromeClient() : WebChromeClient() {
     interface ShowFileChooserListener {
         fun onShowFileChooser(webView: WebView?, filePathCallback: ValueCallback<Array<Uri?>?>?, fileChooserParams: FileChooserParams?): Boolean
     }
+
 
     private var showFileChooserListener: ShowFileChooserListener? = null
 //    private var dialog: Dialog? = null
@@ -129,6 +131,14 @@ class McWebChromeClient() : WebChromeClient() {
         Log.d("MwWebview", "============================")
         return super.onJsPrompt(view, url, message, defaultValue, result)
     }
+
+    override fun onJsBeforeUnload(view: WebView?, url: String?, message: String?, result: JsResult?): Boolean
+    {
+        Log.d("MwWebview", "새로고침을 시도함: $message")
+        result?.cancel()
+        return true
+    }
+
 
 
     /**
